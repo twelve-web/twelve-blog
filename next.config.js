@@ -11,6 +11,7 @@ const nextConfig = {
         hostname: 'static.12interview.uno',
       },
     ],
+    domains: ['static.12interview.uno'],
   },
 };
 

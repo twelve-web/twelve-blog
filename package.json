@@ -10,11 +10,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mdx-js/loader": "^3.1.0",
+    "@mdx-js/react": "^3.1.0",
+    "@next/mdx": "^15.1.6",
     "@tailwindcss/typography": "^0.5.9",
+    "@types/mdx": "^2.0.13",
     "@types/node": "18.16.1",
-    "@types/react": "18.2.0",
-    "@types/react-dom": "18.2.1",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.1",
     "@vercel/analytics": "^1.0.0",
+    "@vercel/blob": "^0.27.1",
     "autoprefixer": "10.4.14",
     "contentlayer": "^0.3.2",
     "eslint": "8.39.0",
@@ -25,7 +30,10 @@
     "postcss": "8.4.23",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-medium-image-zoom": "^5.2.13",
+    "react-modal-image": "^2.6.0",
     "tailwindcss": "3.3.2",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "yet-another-react-lightbox": "^3.21.7"
   }
 }

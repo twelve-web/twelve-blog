@@ -1,0 +1,38 @@
+---
+title: 如何使用Cloudflare，解析你的域名
+description: 使用Cloudflare解析你的域名，让你的域名更加稳定，访问速度更快
+date: "2025-02-08"
+---
+
+import ClickableImage from '../components/ClickableImage'
+
+## Cloudflare 添加域名
+- 登录Cloudflare，点击添加域名
+
+## Cloudflare 添加记录
+- 点击配置DNS并添加记录
+- 选择类型为A，记录值为你的Vercel的IP地址
+- 保存
+
+<Image 
+  src="http://static.12interview.uno/static/cloud-0.png" 
+  alt="配置DNS记录"
+  width={718}
+  height={404}
+/>
+
+> 如果要记录域名类型选择为CNAME，记录值为你的Vercel的域名
+
+## Cloudflare 解析
+- 点击解析，选择你的域名，点击添加记录
+- 选择类型为A，记录值为你的Vercel的IP地址
+- 保存
+
+<Image 
+  src="http://static.12interview.uno/static/cloud-1.png" 
+  alt="解析设置"
+  width={718}
+  height={404}
+/>
+
+> 保存后就可以通过你的域名访问你的Vercel项目了

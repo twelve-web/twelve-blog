@@ -1,3 +1,6 @@
+import { put } from "@vercel/blob";
+
 export async function GET(request: Request) {
-  return new Response('Hello, Next.js!')
+  const { url } = await put('articles/blob.txt', 'Hello World!', { access: 'public' });
+  return new Response(url);
 }

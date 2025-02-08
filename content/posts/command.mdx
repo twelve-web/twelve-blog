@@ -1,0 +1,62 @@
+---
+title: 常用命令
+description: 自用的一些常用命令指令
+date: "2025-02-08"
+---
+
+## Linux命令
+```
+* 查看端口占用
+netstat -tuln | grep :8080
+* 查看进程
+ps aux | grep node
+* 编辑nginx配置
+sudo vim /etc/nginx/nginx.conf
+* 查看nginx日志
+tail -f /var/log/nginx/access.log
+* 查看nginx错误日志
+tail -f /var/log/nginx/error.log
+* 启动nginx
+sudo systemctl start nginx 
+* 停止nginx
+sudo systemctl stop nginx
+* 重启nginx
+sudo systemctl restart nginx
+* 重载nginx
+sudo systemctl reload nginx
+* 查看nginx状态
+sudo systemctl status nginx
+```
+## SQL
+```
+* 查看数据库
+show databases;
+* 查看表
+show tables;
+* 查看表结构
+desc table_name;
+* 查看表数据
+select * from table_name;
+* 删除表数据
+delete from table_name;
+* 添加表数据
+insert into table_name (column1, column2, column3) values (value1, value2, value3);
+* 更新表数据
+update table_name set column1 = value1, column2 = value2 where id = 1;
+* 查询表数据
+select * from table_name where id = 1;
+```
+## FastApi
+```
+* Python 进入虚拟环境
+* 启动fastApi
+uvicorn main:app --reload --host 0.0.0.0
+* 长期启动
+nohup uvicorn main:app --reload --host 0.0.0.0 > log.out 2>&1 &
+* 杀死所有uvicorn进程
+pkill -f "uvicorn main:app“
+* 上传资源到服务器
+scp -r /Users/twelve/Desktop/project/baseadmin/dist root@123.123.123.123:project/server
+```
+
+
