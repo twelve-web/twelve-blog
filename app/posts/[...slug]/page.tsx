@@ -9,7 +9,6 @@ interface PostProps {
     slug: string[]
   }
 }
-
 async function getPostFromParams(params: PostProps["params"]) {
   const slug = params?.slug?.join("/")
   const post = allPosts.find((post) => post.slugAsParams === slug)
@@ -50,7 +49,7 @@ export default async function PostPage({ params }: PostProps) {
   }
 
   return (
-    <article className="py-6 prose dark:prose-invert">
+    <article className="py-6 prose dark:prose-invert ">
       <h1 className="mb-2">{post.title}</h1>
       {post.description && (
         <p className="text-xl mt-0 text-slate-700 dark:text-slate-200">
