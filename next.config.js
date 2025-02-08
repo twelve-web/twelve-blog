@@ -4,6 +4,14 @@ const { withContentlayer } = require("next-contentlayer");
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'static.12interview.uno',
+      },
+    ],
+  },
 };
 
 module.exports = withContentlayer(nextConfig);
