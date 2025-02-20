@@ -1,0 +1,97 @@
+---
+title: 个人对React Hooks的理解（一）
+description: 这是个人对React Hooks的理解 以及部分原理解析。内容可能不完全正确，仅供参考。
+date: "2025-02-20"
+---
+
+## React Hooks
+
+## useState
+useState是React提供的一个用于管理状态的Hook。
+它接收一个初始值，并返回一个数组，数组中包含两个元素：一个是当前状态值，一个是更新状态的函数。
+```js
+const [count, setCount] = useState(0);
+```
+### 1. 它出现解决了什么问题
+- 在React中，状态管理是一个非常重要的问题。在React 16.8之前，状态管理通常使用类组件来实现。类组件虽然可以管理状态，但是存在一些问题：
+    1. 状态逻辑难以复用
+    2. 状态逻辑难以维护
+    3. 状态逻辑难以理解
+    4. 状态逻辑难以调试
+    5. 状态逻辑难以优化
+useState的出现让这些变得简单，更容易维护和理解。
+### 2. useState的state到底存放在哪？它是怎么做到响应式的？
+- React的每个Hook都有一个对应的Fiber节点，Fiber节点中有一个memoizedState属性，它是一个链表(你也可以叫它列表)，链表中存储了当前组件的Hook。
+```js
+// 伪代码 大概就是长这样
+const fiber = {
+  stateNode: myComponentInstance,  // 组件实例 (如函数组件或类组件的实例)
+  type: 'function',                // 组件类型（函数组件、类组件、DOM 元素等）
+  props: { count: 5 },             // 组件的 props
+  memoizedState: {                 // 存储 Hook 状态（每个 Hook 的缓存值）
+    hook1: { value: 0 },           // 例如 useState(0)
+    hook2: { value: "Alice" },     // 例如 useState("Alice")
+  },
+  effectTag: 'UPDATE',             // 更新类型（例如更新、插入、删除等）
+  nextEffect: null,                // 下一个 effect 节点（用于链式处理副作用）
+  updateQueue: [],                 // 更新队列（例如状态更新）
+  return: parentFiber,             // 父组件的 fiber 节点
+  child: childFiber,               // 子组件的 fiber 节点
+};
+```
+- 当我们每次调用setState的时候，React会遍历Fiber节点，检查每个memoizedState的旧值是否发生变化，如果发生变化，则更新状态，并调用组件的更新函数。
+- 所以说我们每次修改值，都会触发组件的更新。这样组件频繁的更新，就会导致性能问题。然而React.memo() 和 useMemo() 的出现，让我们可以优化组件的渲染。
+
+
+## useMemo
+useMemo是React提供的一个用于记忆化计算的Hook。
+它接收一个计算函数和依赖数组，当依赖数组中的值发生变化时，会重新计算计算函数的值，并返回新的值。
+### 1. 它出现解决了什么问题?
+1. 避免重复计算昂贵的计算
+2. 避免组件的频繁渲染
+3. 提高组件的性能
+### 2. 它是怎么做到的？
+1. 当依赖数组中的值发生变化时，会重新计算计算函数的值，并返回新的值。
+2. 当依赖数组中的值没有发生变化时，会返回缓存中的值。
+```js
+const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+const computeExpensiveValue = (a, b) => {
+  return a + b;
+}
+```
+- 当依赖数组中的值a、b发生变化时，会重新计算计算函数的值，并返回新的值。
+- 当依赖数组中的值a、b没有发生变化时，会返回缓存中的值。
+当子组件引用了useMemo的值，当父组件的值发生变化时，子组件不会重新渲染。这样就解决了性能问题。
+```js
+const Child = React.memo(({ memoizedValue }) => {
+  return <div>{memoizedValue}</div>;
+});
+```
+### 3.useState配合useEffect不也能实现昂贵的计算吗？
+- 是的，useState配合useEffect也能实现昂贵的计算。
+但是有个问题，useEffect的执行时机是组件挂载后和每次更新后，而不是组件渲染时就执行的。这就导致我们Effect实现的memo会在组件挂载后才进行计算，会有效率问题。
+再就是写很多的Effect，会让代码变得臃肿，难以维护。
+```js
+const [count, setCount] = useState(0);
+useEffect(() => {
+  setCount(computeExpensiveValue(a, b));
+}, [a, b]);
+```
+### React.memo() 和 useMemo() 
+- React.memo() 是React提供的一个用于记忆化计算的组件。
+- useMemo() 是React提供的一个用于记忆化计算的Hook。
+- React.memo() 是用于组件的记忆化计算，而useMemo() 是用于状态的记忆化计算。
+- React.memo() 和 useMemo()都是会对组件props进行浅比较也就是内存地址的比较，如果props没有发生变化，则不会重新渲染组件。
+```js
+const Child = React.memo(({ props }) => {
+  return <div>{props.count}</div>;
+});
+```
+
+
+
+
+
+
+
+

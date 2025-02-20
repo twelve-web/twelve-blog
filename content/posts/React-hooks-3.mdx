@@ -1,0 +1,146 @@
+---
+title: 个人对React Hooks的理解（三）
+description: 这是个人对React Hooks的理解 以及部分原理解析。内容可能不完全正确，仅供参考。
+date: "2025-02-20"
+---
+
+## React Hooks
+
+## useRef
+useRef是React提供的一个用于获取DOM元素的Hook。
+它接收一个初始值，并返回一个包含current属性的对象。
+它还可以用来存储任何值，比如对象、数组、字符串、数字等。
+```js
+function FocusInput() {
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    // 组件渲染后，自动聚焦到输入框
+    inputRef.current.focus();
+  }, []);
+
+  return <input ref={inputRef} />;
+}
+```
+### 1. 为什么要用useRef存储数据？
+1. 因为useState存储的数据一单被修改，就会触发组件的重新渲染。
+2. 而useRef存储的数据不会触发组件的重新渲染。
+3. 所以我们可以用useRef来存储一些可变的又不提供组件渲染的数据。
+
+## useLayoutEffect
+useLayoutEffect是React提供的一个用于同步执行副作用的Hook。
+它接收一个回调函数，并可以返回一个清理函数。
+它还有接收一个依赖数组，当依赖数组中的值发生变化时，会重新执行回调函数。这点跟useEffect一样。
+它会在DOM更新后同步执行，所以它会比useEffect更早执行。
+```js
+function LayoutEffect() {
+  const [color, setColor] = useState('red');
+
+  useLayoutEffect(() => {
+    console.log('useLayoutEffect');
+  }, []);
+}
+```
+### 1. 为什么要用useLayoutEffect？
+1. 因为useLayoutEffect会在DOM更新后同步执行，所以它会比useEffect更早执行。
+2. 所以我们可以用useLayoutEffect来执行一些干扰比较小的副作用，比如获取DOM元素。
+
+## useReducer
+useReducer是React提供的一个用于管理复杂状态的Hook。
+它接收一个reducer函数，并返回一个状态和dispatch函数。
+它还可以接收一个初始状态。
+它还可以用来管理复杂的状态，比如对象、数组、字符串、数字等。
+```js
+import React, { useReducer } from 'react';
+
+// 定义 reducer 函数
+function counterReducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    default:
+      return state;
+  }
+}
+
+function Counter() {
+  // 使用 useReducer 创建状态和 dispatch 函数
+  const [state, dispatch] = useReducer(counterReducer, { count: 0 });
+
+  return (
+    <div>
+      <p>Count: {state.count}</p>
+      <button onClick={() => dispatch({ type: 'increment' })}>Increment</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>Decrement</button>
+    </div>
+  );
+}
+
+export default Counter;
+```
+### useReducer和useContext的结合使用
+```js
+import React, { useReducer, createContext, useContext } from 'react';
+
+// 初始状态
+const initialState = {
+  count: 0,
+  user: null,
+};
+
+// reducer 函数
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return { ...state, count: state.count + 1 };
+    case 'decrement':
+      return { ...state, count: state.count - 1 };
+    case 'setUser':
+      return { ...state, user: action.payload };
+    default:
+      return state;
+  }
+}
+
+// 创建 Context
+const AppContext = createContext();
+// Context Provider 组件
+export function AppProvider({ children }) {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <AppContext.Provider value={{ state, dispatch }}>
+      {children}
+    </AppContext.Provider>
+  );
+}
+// 子组件
+function Counter() {
+  const { state, dispatch } = useContext(AppContext);
+
+  return (
+    <div>
+      <p>Count: {state.count}</p>
+      <button onClick={() => dispatch({ type: 'increment' })}>Increment</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>Decrement</button>
+    </div>
+  );
+}
+//其他组件使用Context
+// UserProfile 组件
+function UserProfile() {
+  const { state } = useContext(AppContext);
+
+  return (
+    <div>
+      <p>User: {state.user ? state.user.name : 'No user logged in'}</p>
+    </div>
+  );
+}
+```
+
+
+
+
