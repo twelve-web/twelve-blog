@@ -1,0 +1,176 @@
+---
+title: 继承的方式以及两道手写面试题
+description: 个人对继承的理解以及两道手写面试题
+date: "2025-02-20"
+---
+
+## 手写new
+```js
+function MyNew(constructor,...arg){
+    //1.创建一个新对象并继承构造函数原型对象的所有属性和方法
+    let obj =Object.create(constructor.prototype)
+    //2.使用apply修改obj的指向给obj初始值
+    const result = constructor.apply(obj,...arg)
+    //3.返回这个对象
+    return result instanceof Object ?result:obj
+}
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+MyNew(Person,'rr',18)
+```
+## 手写flat
+```js
+function flat (arr){
+    return arr.reduce((acc,cur)=>{
+        if(Array.isArray(cur)){
+            return acc.concat(flat(cur))
+        }else{
+            return acc.concat(cur)
+        }
+    },[])
+}
+const arr =[1,2,3,[4,5,6,[7,8]]]
+const arr2 =flat(arr)
+console.log(arr2)
+```
+
+## 继承的实现方式
+
+### 原型链继承
+通过将父类的实例作为子类的原型对象
+- 缺点：父类的属性会被所有子类共享，修改父类的一个引用类型，所有子类都会受到影响。
+```js
+function Parent(name,age,arr){
+    this.name =name
+    this.age= age
+    this.arr=arr
+}
+Parent.prototype.fun=function(){
+    console.log(this.arr)
+}
+function Child(name,age){
+    this.name =name
+    this.age= age
+}
+let p =new Parent('xx',18,[1,2,3])
+Child.prototype =p
+let c =new Child('cc',16,[4,5,6])
+c.fun()
+```
+### 构造函数继承
+通过bind方法调用父类，将this指向到子类从而给子类添加属性。
+- 缺点：不能继承父类原型上的方法
+```js
+function Parent(name,age,arr){
+    this.name =name
+    this.age= age
+    this.arr=arr
+}
+Parent.prototype.fun=function(){
+    console.log(this.arr)
+}
+function Child(name,age){
+    this.name =name
+    this.age= age
+    Parent.call(Child,name,age)
+}
+let c =new Child('xx',18)
+console.log(c.age)
+c.fun()
+```
+### 组合继承
+通过原型链继承和构造函数继承的结合，既可以继承父类原型上的方法，又可以继承父类的属性。
+- 缺点：父类会被调用两次，一次在Child.prototype = new Parent()，一次在Parent.call(Child,name,age)。
+```js
+function Parent(name,age,arr){
+    this.name =name
+    this.age= age
+    this.arr=arr
+}
+Parent.prototype.fun=function(){
+    console.log(this.arr)
+}
+function Child(name,age){
+    this.name =name
+    this.age= age
+    Parent.call(Child,name,age)
+}
+Child.prototype = new Parent()
+let c =new Child('xx',18)
+console.log(c.age)
+c.fun()
+
+```
+### 寄生式继承
+通过创建寄生函数，在函数内部创建一个新对象，并返回这个对象。
+- 缺点： instanceof 子类会指向父类，会出错
+```js
+function Parent(name,age){
+    this.name =name
+    this.age= age
+}
+Parent.prototype.fun=function(){
+    console.log(this.name)
+}
+function constuctorChild (name,age){
+    let chi = new Parent(name,age)
+    chi.aa=function (){
+        console.log('aa')
+    }
+    return chi
+}
+let child =constuctorChild('xx',18)
+child.fun()
+console.log(child instanceof Parent) //true
+```
+### 寄生组合继承
+其实名字有点误导，寄生组合继承并不是寄生式继承和组合继承的结合，而是通过组合式继承的一个变种。
+- 缺点：无法继承父类的静态属性和方法
+
+```js
+function Parent(name,age){
+    this.name =name
+    this.age= age
+}
+Parent.prototype.fun=function(){
+    console.log(this.name)
+}
+function Child(name,age){
+    this.name =name
+    this.age= age
+    Parent.call(Child,name,age) //继承实例属性
+}
+//继承父方法并将构造器指回
+function constructorChild(){
+    const prototype =Object.create(Parent.prototype)
+    Child.prototype=prototype
+    Child.constructor =Child
+}
+constructorChild()
+```
+### 类继承
+使用ES6的class继承
+- 缺点：
+1. 父子类强耦合
+2. 单一继承只能继承一个
+```js
+class Parent {
+    constructor(name,age){
+        this.name=name
+        this.age=age
+    }
+    cc(){
+        console.log('---')
+    }
+}
+class Child extends Parent{
+    constructor(name,age){
+        super(name,age)
+    }
+}
+let c =new Child('xx',18)
+c.cc()
+```
