@@ -11,7 +11,7 @@ export default function Home() {
     <div className="prose dark:prose-invert">
       {sortedPosts.map((post) => (
         <article key={post._id}>
-          <Link href={post.slug}>
+          <Link href={post.slug} className="no-underline">
             <h2 className="mt-8 mb-0">{post.title}</h2>
           </Link>
           {post.description && <p>{post.description}</p>}

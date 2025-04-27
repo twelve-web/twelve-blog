@@ -7,7 +7,16 @@ module.exports = {
   ],
   darkMode: ["class"],
   theme: {
-    extend: {},
+    extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            '--tw-prose-links': '#3b82f6',
+            maxWidth: '100%',
+          },
+        },
+      },
+    },
   },
   plugins: [require("@tailwindcss/typography")],
 }
