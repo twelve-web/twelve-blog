@@ -2,7 +2,7 @@ import Image from "next/image"
 import { useMDXComponent } from "next-contentlayer/hooks"
 
 const components = {
-  Image,
+  Image
 }
 
 interface MdxProps {
@@ -12,5 +12,9 @@ interface MdxProps {
 export function Mdx({ code }: MdxProps) {
   const Component = useMDXComponent(code)
 
-  return <Component components={components} />
+  return (
+    <div className="mdx-content prose dark:prose-invert w-full max-w-full">
+      <Component components={components} />
+    </div>
+  )
 }

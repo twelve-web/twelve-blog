@@ -1,0 +1,137 @@
+---
+title: 前端手写题
+description: 一些前端手写题的示例
+date: "2025-02-20"
+---
+
+## 二分查找
+```js
+function dichotomySearch(arr,target){
+    let low =0
+    let high =arr.length-1
+    while(low<=high){
+    let mid = Math.floor((low + high) /2) 
+      if(target==arr[mid]){
+            return mid
+        }else if(target>arr[mid]) {  
+            low = mid +1
+        }else{
+            high =mid -1
+        }
+    }
+    return -1
+}
+let arr =[1,3,5,6,7,8,9,9]
+console.log(dichotomySearch(arr,5))
+```
+## 两数之和
+***给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。
+你可以假设每种输入只会对应一个答案，并且你不能使用两次相同的元素。
+你可以按任意顺序返回答案。***
+- ### 示例 1：
+
+输入：nums = [2,7,11,15], target = 9
+输出：[0,1]
+解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。
+- ### 示例 2：
+
+输入：nums = [3,2,4], target = 6
+输出：[1,2]
+- ### 示例 3：
+
+输入：nums = [3,3], target = 6
+输出：[0,1]
+```js
+let nums = [2,7,11,15];
+let target = 9;
+const twoSum =(nums,target)=>{
+    let map =new Map()
+    for(let i=0;i<nums.length;i++){
+        const currentNum =nums[i]
+        const targetNum =target - currentNum //重点
+        const targetIndex =map.get(targetNum) //重点
+        if(targetIndex!==undefined){
+            return [targetIndex,i]
+        }else{
+            map.set(currentNum,i)
+        }
+    }
+}
+console.log(twoSum(nums,target))
+
+```
+## 实现EventBus
+```js
+class EventBus {
+    constructor(){
+        this.events={}
+    }
+    on(event,callback){
+        if(!this.events[event]){
+            this.events[event]=[]
+        }
+        this.events[event].push(callback)
+    }
+    emit(event,...arg){
+        if(this.events[event]){
+            this.events[event].forEach(element => {
+                element(...arg)
+            });
+        }
+    }
+    off(event,callback){
+        if(this.events[event]){
+            this.events[event].filter(fn=>fn!=callback)
+        }
+    }
+    once(event,callback){
+        if(this.events[event]){
+          const  onCallback=function(...arg){
+            callback(arg)
+            this.off(event,onCallback)
+          }
+          this.$on(event,onCallback)
+        }
+
+    }
+
+}
+const bus =new EventBus()
+bus.on('aa',(params)=>{
+    console.log(params)
+})
+bus.emit('aa',2323)
+```
+## 快速排序
+```js
+let arr =[7,34,2,57,21,5,73,6,5,7,9,2,11,31,16]
+const quickSort =(arr)=>{
+    if(arr.length<=1) return arr
+    const point =arr[Math.floor(arr.length/2)]
+    let left = arr.filter(num=>num<point)
+    let middle =arr.filter(num=>num==point)
+    let right =arr.filter(num=>num>point)
+    return [...quickSort(left),...middle,...quickSort(right)]
+}
+quickSort(arr)
+```
+## 手写call
+```js
+Function.prototype.myCall = function (context, ...arg) {
+    if (typeof this != 'function') {
+        throw Error('函数才可调用')
+    }
+    let key = Symbol()
+    context[key] = this
+   const result = context[key](arg)
+    delete context[key]
+    return result
+
+}
+function greet(greeting) {
+    console.log(`${greeting}, ${this.name}`);
+}
+
+const person = { name: "Alice" };
+greet.myCall(person,'hello')
+```

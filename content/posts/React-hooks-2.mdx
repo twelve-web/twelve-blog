@@ -1,0 +1,103 @@
+---
+title: 个人对React Hooks的理解（二）
+description: 这是个人对React Hooks的理解 以及部分原理解析。内容可能不完全正确，仅供参考。
+date: "2025-02-20"
+---
+
+## React Hooks
+
+## useEffect
+useEffect的第一个参数是回调函数，第二个参数是依赖数组。
+它接收一个函数，并可以返回一个清理函数。
+```js
+useEffect(() => {
+  console.log('effect');
+  return () => {
+    console.log('cleanup');
+  };
+}, []);
+```
+### 1. 它出现解决了什么问题
+- useEffect的出现解决了类组件中难以处理副作用的问题。
+- 在类组件中，我们通常需要使用componentDidMount、componentDidUpdate、componentWillUnmount来处理副作用。
+- 但是这些方法在函数组件中无法使用，所以useEffect的出现让我们可以更方便地处理副作用。
+- 而且写Class类的生命周期函数，会让代码变得臃肿，难以维护。
+### 2. useEffect的执行时机
+- useEffect的执行时机是组件挂载后和每次更新后。
+- 当组件挂载后，会执行useEffect的回调函数。
+- 当依赖数组中的值发生变化时，会执行useEffect的回调函数。
+### 什么是副作用？
+- 副作用是指在函数组件中，除了渲染之外的其他操作。
+比如我们需要调用api得到数据，这个就叫做副作用。
+副作用会影响组件的渲染，所以需要使用useEffect来处理。
+
+
+
+
+## useCallback
+useCallback是React提供的一个用于记忆化函数的Hook。
+她跟React.memo很像，都是用于记忆化的。
+### 1. 它出现解决了什么问题?
+1. 避免组件的频繁渲染
+```js
+function Parent() {
+  const [count, setCount] = useState(0);
+
+  const handleClick = useCallback(() => {
+    setCount(count + 1);
+  }, [count]);  // 依赖于 count，只有 count 变化时才会重新创建 handleClick
+
+  return <Child onClick={handleClick} />;
+}
+
+function Child({ onClick }) {
+  useEffect(() => {
+    console.log("Child rendered");
+  });
+
+  return <button onClick={onClick}>Click me</button>;
+}
+```
+- 当依赖数组中的值a、b发生变化时，handleClick函数才会重新创建。
+- 当依赖数组中的值a、b没有发生变化时，会返回原来的handleClick。
+当子组件引用了useCallback包裹的handleClick时，当父组件的count发生变化时，子组件不会重新渲染。这样就解决了性能问题。
+
+## useContext
+useContext是React提供的一个用于上下文传递的Hook,这个Hook返回一个组件。
+它可以将上下文传递给所有子代组件。
+### 1. 有什么用?
+1. useContext 用于访问通过 Context.Provider 提供的上下文值。
+2. 它让你能够轻松地从上下文中获取数据，而不需要手动传递每个组件的 props。
+3. 通过 useContext，我们可以避免 props 层层传递的问题，简化跨组件的状态共享。
+```js
+import React, { createContext, useState } from 'react';
+
+// 创建上下文
+const ThemeContext = createContext();
+
+// 提供上下文值
+function App() {
+  const [theme, setTheme] = useState('light');
+
+  return (
+    <ThemeContext.Provider value={theme}>
+      <Child />
+    </ThemeContext.Provider>
+  );
+}
+
+function Child() {
+  return <Grandchild />;
+}
+
+function Grandchild() {
+  return <Button />;
+}
+
+function Button() {
+  // 使用 useContext 获取上下文值
+  const theme = useContext(ThemeContext);
+
+  return <button>The current theme is {theme}</button>;
+}
+```

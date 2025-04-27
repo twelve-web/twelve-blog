@@ -1,0 +1,58 @@
+---
+title: 使用Js写一些数据结构
+description: 一些前端数据结构的理解
+date: "2025-03-04"
+---
+
+## 链表
+```js
+class Node {
+  constructor(data) {
+    this.data = data;
+    this.next = null;
+  }
+}
+class LinkedList {
+  constructor() {
+    this.head = null;
+  }
+  insert(data) {
+    let newNode = new Node(data);
+    if (!this.head) {
+      this.head = newNode;
+    } else {
+      let current = this.head; //获取引用 堆内存
+      while (current.next) {
+        current = current.next; //重新赋值不操作引用
+      }
+      current.next = newNode; //拿到子链表，直接修改操作引用
+    //   console.log(current,'====',current.next)
+    // console.log(this.head,'aaaaa')
+      
+    }
+
+  }
+}
+const link = new LinkedList();
+link.insert(10);
+link.insert(20);
+let obj ={
+    data:1,
+    next:{
+        data:2,
+        next:null
+    }
+}
+let obj2=obj.next
+obj2.next= {
+    data:3,
+    next:null
+}
+
+console.log(obj,'==')
+// while(obj.next){
+//     console.log(obj.next)
+//     obj=obj.next
+// }
+
+```

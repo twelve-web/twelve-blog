@@ -1,0 +1,143 @@
+---
+title: 关于SEO搜索引擎优化自动创建脚本
+description: 应用于SSG静态网站生成，自动创建.vue文件。
+date: "9999-02-08"
+---
+>一个动态生成.vue文件的脚本，主要运作于SEO搜索引擎优化需要创建大量sitemap站点地图。固定好所有组件后动态生成.vue文件即可，保持页面一致化。
+>只需改动json文件配置。
+>因为用的是nuxt.js所以路由是根据pages下文件夹目录动态生成的。
+
+## 脚本
+
+``` javascript
+const jsonData = require('./json/seo-ability.json')
+const fs = require('fs');
+const path = require('path');
+
+// 模板字符串
+const template = (data) => `
+      <template>
+        <main class="home-page">
+          <SeoHeader :data='data.header' :link='data.tryLink'></SeoHeader>
+          <SeoContent :data='data.content' :link='data.tryLink'></SeoContent>
+          <SeoFaq :data='data.faq'></SeoFaq>
+          <SeoCreators :data='data.creators'></SeoCreators>
+          <SeoMore :data='data.more'></SeoMore>
+          <FooterLanding :title='data.header.title'></FooterLanding>
+        </main>
+      </template>
+      <script setup>
+      import SeoHeader from '@/components/SeoAbility/SeoHeader.vue';
+      import SeoContent from '@/components/SeoAbility/SeoContent.vue';
+      import FooterLanding from '@/components//Landing/FooterLanding.vue';
+      import SeoFaq from '@/components/SeoAbility/SeoFaq.vue';
+      import SeoCreators from '@/components/SeoAbility/SeoCreators.vue';
+      import SeoMore from '@/components/SeoAbility/SeoMore.vue';
+      const data=ref(${JSON.stringify(data)})
+      onMounted(() => {
+        setDeatilBurial();
+      });
+      useSeoMeta({
+        title: data.value.meta.title,
+        keywords: data.value.meta.keywords,
+        description: data.value.meta.description,
+      });
+      </script>
+      <style lang="scss" scoped>
+          .home-page{
+            padding-top: 64px;
+            font-size: 10px;
+            color: #FFFFFF;
+            background: #0D0D0D;
+          }
+      </style>
+      `;
+
+// 生成文件
+jsonData.forEach((page) => {
+  const targetDir = path.join(__dirname, 'pages',page.path); // 指定目录
+  const filePath = path.join(targetDir,'index.vue'); // 文件完整路径
+  // 确保目标目录存在
+  if (!fs.existsSync(targetDir)) {
+    fs.mkdirSync(targetDir, {
+      recursive: true
+    });
+  }
+  // 写入文件
+  const content = template(page);
+  fs.writeFileSync(filePath, content, 'utf-8');
+  console.log(`Generated: ${filePath}`);
+});
+```
+
+## json
+
+json文件自己配置即可，根据自己业务组件内容展示。
+
+以下为例子
+
+---
+```json
+[{
+    "path": "template/aaaa",
+    "tryLink":"ccc",
+    "meta": {
+      "title": "aaaa,
+      "description": "bbbb"
+    },
+    "header": {
+      "title": "cccc",
+      "description": "dddd",
+      "buttonText": "eeee",
+      "resource": "fff"
+    },
+    "content": {
+      "teachingTitle": "gggg",
+      "teachingList": [{
+          "title": "xxxxx",
+          "resource": "xxxxx"
+        },
+        {
+          "title": "xxx",
+          "resource": "hxx"
+        },
+        {
+          "title": "Sxxx",
+          "resource": "xxx"
+        }
+      ],
+      "useTille": "xxxxxx",
+    },
+  {
+    "path": "template/bbbb",
+    "tryLink":"ccc",
+    "meta": {
+      "title": "aaaa,
+      "description": "bbbb"
+    },
+    "header": {
+      "title": "cccc",
+      "description": "dddd",
+      "buttonText": "eeee",
+      "resource": "fff"
+    },
+    "content": {
+      "teachingTitle": "gggg",
+      "teachingList": [{
+          "title": "xxxxx",
+          "resource": "xxxxx"
+        },
+        {
+          "title": "xxx",
+          "resource": "hxx"
+        },
+        {
+          "title": "Sxxx",
+          "resource": "xxx"
+        }
+      ],
+      "useTille": "xxxxxx",
+    },
+ ]
+```
+

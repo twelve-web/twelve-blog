@@ -1,0 +1,53 @@
+---
+title: Git指令以及Commit提交规范
+description: 常用Git指令以及Commit提交规范
+date: "2025-02-08"
+---
+
+## Git指令
+```
+* 查看分支
+git branch
+* 切换分支
+git checkout -b branch-name
+* 创建分支
+git branch branch-name
+* 删除分支
+git branch -d branch-name
+* 合并分支
+git merge branch-name
+* 查看分支合并状态
+git branch --merged
+* 查看分支合并状态
+git branch --no-merged
+* 拉取远程分支
+git pull origin branch-name
+* 推送到远程分支
+git push origin branch-name
+* 查看远程分支
+git fetch
+* 远程分支关联本地分支
+git remote add origin https://github.com/username/repository.git
+* 删除远程分支
+git push origin --delete branch-name
+* 删除本地分支
+git branch -d branch-name
+* 删除远程分支
+git push origin --delete branch-name
+```
+
+## Commit提交规范
+```
+Type	 作用
+feat	 新增特性 (feature)
+fix	     修复 Bug(bug fix)
+docs	 修改文档 (documentation)
+style	 代码格式修改(white-space, formatting, missing semi colons, etc)
+refactor 代码重构(refactor)
+perf	 改善性能(A code change that improves performance)
+test	 测试(when adding missing tests)
+build	 变更项目构建或外部依赖（例如 scopes: webpack、gulp、npm 等）
+ci	     更改持续集成软件的配置文件和 package 中的 scripts 命令，例如 scopes: Travis, Circle 等
+chore	 变更构建流程或辅助工具(比如更改测试环境)
+revert	 代码回退
+```
