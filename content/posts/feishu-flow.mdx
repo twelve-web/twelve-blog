@@ -1,0 +1,37 @@
+---
+title: 飞书自动化流程配合API使用
+description: 关于我用飞书的自动化流程API搭建的自动总结群聊功能
+date: "2025-04-27"
+---
+
+## 背景
+需要一个自动总结群聊的功能，群聊内容比较多，手动总结太麻烦了，所以想到了用飞书的自动化流程Api来实现。
+这样可以实现定时总结，并且可以自动发送总结到群里。
+原理很简单就是用飞书自动化调用Py服务接口，接口返回内容，飞书调用自身能力总结后，通过定时任务发送到群里。
+
+## 实现工具
+- 飞书
+- 飞书自动化流程
+- 飞书群聊API
+- 飞书多维表格
+- Python Flask搭建的后端项目
+- 飞书API文档
+
+## 飞书相应API
+- 群聊搜索API(获取群聊ID)
+[群聊搜索API](https://open.feishu.cn/document/server-docs/group/chat/search?appId=cli_a7509ed8db23101c)
+
+- 群聊消息列表API(获取群聊消息)
+[群聊消息列表API](https://open.feishu.cn/document/server-docs/im-v1/message/list?appId=cli_a7509ed8db23101c)
+
+## 自动化流程
+用的是多维表格的自动化流程
+<Image src="http://static.markweb.top/static/fs-01.jpg" width="718" height="404" alt="Image" />
+<Image src="http://static.markweb.top/static/fs-02.jpg" width="718" height="404" alt="Image" />
+
+
+
+
+
+
+
