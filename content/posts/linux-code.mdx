@@ -1,0 +1,282 @@
+---
+title: 常用Linux命令
+description: 一些常用的Linux命令
+date: "2025-05-19"
+---
+
+## 文件操作
+
+### 基础文件操作
+- `ls` - 列出目录内容
+  ```bash
+  ls -l    # 以长格式显示
+  ls -a    # 显示所有文件，包括隐藏文件
+  ls -lh   # 以人类可读的方式显示文件大小
+  ```
+- `cd [目录]` - 改变当前目录
+  ```bash
+  cd ..    # 移动到上一级目录
+  cd ~     # 移动到用户主目录
+  ```
+- `pwd` - 显示当前工作目录的完整路径
+  ```bash
+  pwd
+  ```
+- `touch [文件名]` - 创建新文件或更新现有文件的时间戳
+  ```bash
+  touch newfile.txt
+  ```
+- `mkdir [目录名]` - 创建新目录
+  ```bash
+  mkdir newdir
+  mkdir -p a/b/c   # 创建多级目录
+  ```
+
+### 文件内容查看
+- `cat [文件名]` - 查看文件内容
+  ```bash
+  cat file.txt
+  ```
+- `less [文件名]` - 分页查看文件内容
+  ```bash
+  less file.txt
+  ```
+- `head -n [行数] [文件名]` - 查看文件开头几行
+  ```bash
+  head -n 10 file.txt
+  ```
+- `tail -n [行数] [文件名]` - 查看文件结尾几行
+  ```bash
+  tail -n 20 file.txt
+  tail -f logfile.log   # 实时查看文件更新（常用于日志）
+  ```
+- `grep [模式] [文件名]` - 在文件中搜索匹配的文本行
+  ```bash
+  grep "pattern" file.txt
+  grep -r "pattern" directory   # 递归搜索目录及子目录
+  ```
+
+### 文件操作
+- `cp [源文件] [目标文件]` - 复制文件
+  ```bash
+  cp source.txt destination.txt
+  cp -r sourcedir/ destdir/   # 递归复制目录及内容
+  ```
+- `mv [源文件] [目标文件]` - 移动或重命名文件
+  ```bash
+  mv oldname.txt newname.txt
+  mv file.txt /path/to/destination/
+  ```
+- `rm [文件名]` - 删除文件
+  ```bash
+  rm file.txt
+  rm -r directory/   # 递归删除目录及内容
+  rm -f file.txt     # 强制删除，不提示
+  ```
+- `find [路径] -name "[文件名]"` - 按名称查找文件
+  ```bash
+  find . -name "*.txt"
+  find /home -type f -size +100M   # 查找大于100MB的文件
+  ```
+
+### 文件权限
+- `chmod [权限] [文件名]` - 更改文件权限
+  ```bash
+  chmod 755 file.sh   # 设置可执行权限
+  chmod -R 644 dir    # 递归设置目录权限
+  ```
+- `chown [用户]:[组] [文件名]` - 更改文件所有者和组
+  ```bash
+  chown user:group file.txt
+  ```
+- `chgrp [组] [文件名]` - 更改文件所属组
+  ```bash
+  chgrp newgroup file.txt
+  ```
+
+### 压缩与解压
+- 创建与解压 tar 归档
+  ```bash
+  tar -cvf archive.tar files/   # 创建归档
+  tar -xvf archive.tar          # 解压归档
+  tar -czvf archive.tar.gz files/   # 创建gzip压缩的tar归档
+  tar -xzvf archive.tar.gz          # 解压gzip压缩的tar归档
+  ```
+- 创建与解压 zip 文件
+  ```bash
+  zip -r archive.zip files/   # 创建zip压缩包
+  unzip archive.zip           # 解压zip文件
+  ```
+
+## 系统管理
+
+### 系统信息
+- 查看系统信息
+  ```bash
+  uname -a         # 显示系统信息
+  hostname         # 显示主机名
+  df -h            # 显示磁盘使用情况
+  du -sh directory # 显示目录占用空间
+  free -h          # 显示内存使用情况
+  uptime           # 显示系统运行时间和负载
+  ```
+
+### 用户管理
+- 用户相关命令
+  ```bash
+  whoami           # 显示当前用户名
+  id               # 显示用户ID和组ID
+  useradd username # 添加新用户
+  passwd username  # 修改用户密码
+  userdel username # 删除用户
+  su username      # 切换用户
+  sudo command     # 以超级用户权限执行命令
+  ```
+
+### 系统服务
+- 服务管理
+  ```bash
+  systemctl start service      # 启动服务
+  systemctl stop service       # 停止服务
+  systemctl restart service    # 重启服务
+  systemctl status service     # 查看服务状态
+  systemctl enable service     # 设置开机自启动
+  service servicename action   # 控制服务（旧的方式）
+  ```
+
+## 进程管理
+
+### 进程查看
+- 查看进程
+  ```bash
+  ps               # 显示当前进程状态
+  ps aux           # 显示所有进程详细信息
+  ps -ef           # 全格式显示所有进程
+  top              # 动态显示系统资源和进程状态
+  htop             # 增强版进程查看器（需安装）
+  ```
+
+### 进程控制
+- 控制进程
+  ```bash
+  kill 1234                # 终止进程
+  kill -9 1234             # 强制终止进程
+  killall processname      # 终止所有同名进程
+  pkill processname        # 按名称终止进程
+  bg                       # 将进程放到后台运行
+  fg                       # 将后台进程移到前台
+  nohup command &          # 在后台运行命令，并在终端关闭后继续运行
+  ```
+
+## 网络相关
+
+### 网络连接
+- 查看网络信息
+  ```bash
+  ifconfig               # 显示网络接口信息
+  ip addr                # 显示IP地址信息（新命令）
+  ping hostname          # 测试网络连接
+  traceroute hostname    # 显示到达主机的路由路径
+  netstat -tuln          # 显示网络连接、路由表和网络接口信息
+  ss -tuln               # 显示网络连接信息（netstat的替代品）
+  ```
+
+### 网络传输
+- 文件传输
+  ```bash
+  wget URL                                   # 下载文件
+  curl URL                                   # 发送HTTP请求
+  scp file.txt user@host:/path/to/dest       # 在主机间安全复制文件
+  rsync -avz sourcedir/ destdir/             # 同步文件和目录
+  ```
+
+### 防火墙
+- 防火墙管理
+  ```bash
+  iptables -L                 # 列出防火墙规则
+  firewall-cmd --list-all     # 显示防火墙信息
+  ufw status                  # 查看UFW防火墙状态
+  ```
+
+## 文本处理
+
+### 文本编辑器
+- 常用编辑器
+  ```bash
+  nano filename      # 简单的文本编辑器
+  vi filename        # 强大的文本编辑器
+  vim filename       # vi的增强版
+  emacs filename     # 另一个强大的文本编辑器
+  ```
+
+### 文本处理
+- 文本处理命令
+  ```bash
+  cut -d',' -f1 file.csv          # 按分隔符分割文件并提取字段
+  sort file.txt                   # 对文件内容排序
+  uniq file.txt                   # 删除文件中的重复行
+  wc file.txt                     # 统计文件的行数、字数和字节数
+  sed 's/old/new/g' file.txt      # 流编辑器，用于文本替换
+  awk '{print $1}' file.txt       # 按模式扫描和处理文本
+  ```
+
+## 其他实用命令
+
+### 日期和时间
+- 日期时间命令
+  ```bash
+  date            # 显示当前日期和时间
+  cal             # 显示日历
+  ```
+
+### 帮助
+- 获取命令帮助
+  ```bash
+  man command         # 显示命令手册
+  info command        # 显示命令信息
+  whatis command      # 显示命令的简短描述
+  command --help      # 显示命令的帮助信息
+  ```
+
+### 系统控制
+- 系统控制命令
+  ```bash
+  shutdown -h now     # 立即关机
+  reboot              # 重启系统
+  logout 或 exit      # 注销当前用户
+  ```
+
+### 定时任务
+- Crontab 管理
+  ```bash
+  crontab -l          # 列出当前用户的定时任务
+  crontab -e          # 编辑定时任务
+  ```
+
+## 常见任务示例
+
+### 查找大文件
+```bash
+find / -type f -size +100M -exec ls -lh {} \; | sort -rh | head -n 10
+```
+
+### 监控系统活动
+```bash
+watch -n 1 'ps aux | sort -rk 3 | head -n 10'
+```
+
+### 批量重命名文件
+```bash
+rename 's/\.jpeg$/\.jpg/' *.jpeg
+```
+
+### 查看最常用的命令
+```bash
+history | awk '{print $2}' | sort | uniq -c | sort -rn | head -n 10
+```
+
+### 一行备份文件
+```bash
+tar -czvf backup-$(date +%Y%m%d).tar.gz /path/to/directory
+```
+
