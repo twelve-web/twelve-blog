@@ -1,0 +1,61 @@
+---
+title: 关于一个自动创建API方法、Interface、Mock数据的MCP
+description: 基于Typescript SDK开发的MCP，自动创建API方法、interface、Mock数据，并提供给前端使用，工作效率至少提升15%
+date: "9999-12-30"
+---
+
+## 背景
+
+因每次前端开发时每次复制粘贴 Yapi 的后端接口和手动创建 TS 类型和 Mock 数据比较麻烦因此开发自动化 MCP，使用 Typescript SDK 开发。
+
+## 安装方式
+
+```json
+{
+  "mcpServers": {
+    "auto-api-mcp": {
+      "command": "npx",
+      "env": {
+        "YAPI_COOKIE": "_yapi_token=your_token; _yapi_uid=your_uid",
+        "BASE_URL": "xxxxx"
+      }
+    }
+  }
+}
+```
+
+## 使用方式 一句话即可
+
+@https://fed.qschou.com/project/810/interface/api/cat_2813 帮我生成 这是例子@index.js 加上 interface 和 mock 数据并应用
+
+## 你将会得到
+
+## 接口的 model
+
+<Image
+  src="http://static.markweb.top/static/auto-api-mcp-0.jpg"
+  width="718"
+  height="404"
+  alt="Image"
+/>
+## 接口的 interface
+<Image
+  src="http://static.markweb.top/static/auto-api-mcp-1.jpg"
+  width="718"
+  height="404"
+  alt="Image"
+/>
+## Mock的数据
+<Image
+  src="http://static.markweb.top/static/auto-api-mcp-2.jpg"
+  width="718"
+  height="404"
+  alt="Image"
+/>
+## 非常好的结果
+<Image
+  src="http://static.markweb.top/static/auto-api-mcp-3.jpg"
+  width="718"
+  height="404"
+  alt="Image"
+/>
