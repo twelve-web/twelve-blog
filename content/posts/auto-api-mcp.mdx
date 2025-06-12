@@ -8,9 +8,14 @@ date: "9999-12-30"
 
 因每次前端开发时每次复制粘贴 Yapi 的后端接口和手动创建 TS 类型和 Mock 数据比较麻烦因此开发自动化 MCP，使用 Typescript SDK 开发，以 Yapi 举例给大家提供思路而已，其他同理。
 
-## github 地址 请不要忘记 star 哦～
+## github 地址 请不要忘记 star 嗷～
 
 [https://github.com/twelve-web/auto-api-mcp](https://github.com/twelve-web/auto-api-mcp)
+
+## 强制依赖
+
+- 需要安装 node 20 以上版本
+- NPM 官方源
 
 ## 安装方式
 
@@ -30,7 +35,14 @@ date: "9999-12-30"
 
 ## 使用方式 一句话即可
 
-@https://fed.qschou.com/project/810/interface/api/cat_2813 帮我生成 这是例子@index.js 加上 interface 和 mock 数据并应用
+@https://xxxxxxxx/project/810/interface/api/cat_2813 帮我生成 这是例子@index.js 加上 interface 和 mock 数据并应用
+
+## 可扩展 prompt
+
+1. 如果我发送你类似https://xxxxxxxxx.com/project/810/interface/api/cat_2783这样的消息请帮我调用 auto-api-mcp 的 yapi_get_interfaces
+2. 如果我发送你类似https://xxxxxxx.com/project/1199/interface/api/34478请调用 auto-api-mcp 的 yapi_get_interface_detail
+   auto-api-mcp 获取到的返回值均需要生成 mock interface model 创建 index.ts types.ts mock.ts 文件 请按照当前项目已经写好的 api 作为例子
+   严格遵循官方 Vue.js 文档，了解有关数据获取、渲染和路由的最新最佳实践。
 
 ## 你将会得到
 

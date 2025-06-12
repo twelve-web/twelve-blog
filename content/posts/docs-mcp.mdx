@@ -1,0 +1,121 @@
+---
+title: "Wiki-MCP: 智能文档处理工具"
+description: Wiki-MCP是一个智能文档处理工具，可以自动从Wiki页面提取和处理需求文档信息，提高开发效率。
+date: 9999-03-20
+---
+
+## 一、背景
+
+在日常开发中，我们经常需要从 Wiki 文档中提取关键信息。传统的人工摘取方式存在以下问题：
+
+- 效率低下，耗时费力
+- 容易因疲劳导致信息遗漏或错误
+- Cursor 等开发工具无法直接与 Wiki 通信
+
+为了解决这些问题，我们开发了 Wiki-MCP，它可以：
+
+- 自动提取 Wiki 需求文档信息
+- 提升 AI 开发工具的信息处理效率
+- 与 Cursor、Trae 等 MCP 客户端无缝协作
+- 可与 auto-api-mcp 结合使用，实现完整的开发流程
+
+## 二、功能介绍
+
+### 2.1 基础文档获取 (get_wiki_content_fast)
+
+快速获取 Wiki 页面内容，进行数据清洗，返回整理好的需求内容和图片。
+
+**参数说明：**
+
+- `url`：获取 Wiki 内容的页面地址（必填，直接传入）
+- `cookie`：Wiki 访问鉴权（必填，环境变量配置）
+
+### 2.2 AI 增强处理 (get_wiki_page)
+
+在基础文档获取的基础上，通过 DeepSeek-R1 进行智能处理，生成结构化的需求描述。
+
+**参数说明：**
+
+- `url`：获取 Wiki 内容的页面地址（必填，直接传入）
+- `cookie`：Wiki 访问鉴权（必填，环境变量配置）
+- `apiKey`：DeepSeek API 调用凭证（必填，环境变量配置）
+- `promptTemplate`：自定义的需求描述生成模板（可选，有默认值）
+
+## 三、技术依赖
+
+- MCP Inspector
+- modelcontextprotocol/typescript-sdk
+- 星语 Deepseek-R1
+
+## 四、快速开始
+
+### 环境要求
+
+⚠️ **强制依赖**:
+
+1. Token 必须配置
+2. Node.js 版本 ≥ 20
+3. NPM 源必须设置为公司内部源：`https://npmmirror.xxxxxxx`
+
+### MCP 配置示例
+
+```json
+{
+  "wiki-mcp": {
+    "command": "npx",
+    "args": ["-y", "wiki-mcp"],
+    "env": {
+      "WIKI_COOKIE": "your_wiki_cookie_here",
+      "DEEPSEEK_API_KEY": "your_deepseek_api_key_here"
+    }
+  }
+}
+```
+
+### 使用示例
+
+1. **基础文档获取**:
+
+```typescript
+// 获取 Wiki 页面内容
+const wikiContent = await mcp.invoke("wiki-mcp", "get_wiki_content_fast", {
+  url: "your_wiki_url",
+});
+```
+
+2. **AI 增强处理**:
+
+```typescript
+// 获取 AI 处理后的需求描述
+const aiProcessedContent = await mcp.invoke("wiki-mcp", "get_wiki_page", {
+  url: "your_wiki_url",
+  promptTemplate:
+    "请对我的需求文档进行简单整理，不需要提供技术方案，生成MD格式。",
+});
+```
+
+## 五、最佳实践
+
+1. **工作流程**:
+
+   - 使用 Wiki-MCP 获取并处理需求文档
+   - 使用 auto-api-mcp 处理接口相关内容
+   - 使用 Cursor 等工具进行开发实现
+
+2. **提示词优化**:
+   - 根据项目特点定制 promptTemplate
+   - 指定明确的输出格式要求
+   - 添加项目特定的约束条件
+
+## 六、注意事项
+
+1. 环境变量配置
+
+   - 确保 WIKI_COOKIE 正确配置
+   - 确保 DEEPSEEK_API_KEY 有效
+
+2. 使用建议
+   - 定期更新 Cookie 信息
+   - 注意 API 调用频率限制
+   - 使用前测试文档访问权限
+   - 建议本地保存处理结果，避免重复调用

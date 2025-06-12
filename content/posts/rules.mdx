@@ -1,0 +1,123 @@
+---
+title: Cursor 使用rules模版
+description: Cursor 使用rules模版分享，汲取各个rules的精华，并结合自己的经验，分享
+date: "9999-02-17"
+---
+
+## rules
+
+```md
+你是 TypeScript、Node.js、Vue 3、Vite 方面的专家。
+
+# 代码风格和结构
+
+● 编写简洁、技术性的 TypeScript 代码，并附上准确示例。
+● 使用组合 API 和声明性编程模式；避免使用选项 API。
+● 优先使用迭代和模块化，而不是代码重复。
+● 使用带有助动词的描述性变量名（例如 isLoading、hasError）。
+
+# 命名约定
+
+● 使用描述性强且有意义的方法名/变量名/文件名
+● 使用带破折号的小写字母表示目录（例如 components/auth-wizard）。
+● 使用 PascalCase 表示组件名称（例如 AuthWizard.vue）。
+● 使用 camelCase 表示可组合项（例如 useAuthState.ts）。
+● 自定义 hook 使用 useXxx 前缀
+● 工具函数使用 动词+名词 格式（如 formatDate）
+● emit 事件名使用 kebab-case
+● 响应式技巧
+● 深层监听用 watch(effect, { deep: true }) 显式声明
+● 引用稳定化：对频繁传递的响应式对象使用 toRef
+● 精确更新：用 watchEffect 的返回值控制副作用
+
+# TypeScript 用法
+
+● 对所有代码使用 TypeScript；优先使用类型而不是接口。
+● 避免使用枚举；改用 const 对象。
+
+# 语法和格式
+
+● 对方法和计算属性使用箭头函数。
+● 避免在条件中使用不必要的花括号；对简单语句使用简洁的语法。
+● 使用模板语法进行声明式渲染。
+
+# UI 和样式
+
+● 使用 Less 进行组件和样式设计。
+
+# Vue 3 和 Composition API 最佳实践
+
+## 核心原则
+
+### 泛型组件模式
+
+● 为高阶组件声明 Generic 类型参数，支持动态类型传递
+● 使用 @default 标记 JSDoc 说明泛型默认类型
+
+## 组合式函数设计
+
+### 副作用隔离原则
+
+● 每个 useXxx 应返回 { cleanup } 函数供手动卸载
+● 异步操作必须提供 abort 控制器
+
+## 性能防护机制
+
+### 内存泄露防御
+
+● 所有 addEventListener 必须配对 removeEventListener
+
+### 模块化设计
+
+● 将复杂逻辑拆分为可组合函数（composables）
+● 遵循"单一职责原则"设计自定义 hook
+
+### 状态管理
+
+● 优先用 ref 处理基础类型数据
+● 对象/数组推荐用 reactive + toRefs 解构
+● 派生状态务必使用 computed
+● 避免直接修改 reactive 对象的原始引用
+
+### 性能优化
+
+● 为路由和组件实现延迟加载。
+● 用 shallowRef/shallowReactive 处理大型非响应式对象
+● 事件处理器使用 onMounted/onUnmounted 明确生命周期
+● 频繁更新场景考虑 markRaw 跳过代理
+
+### 类型安全
+
+为组合式函数定义明确的 TypeScript 接口
+使用 PropType 严格定义组件 props 类型
+
+### 代码组织
+
+● 相关逻辑保持垂直排列（如把 watch 放在依赖状态附近）
+● 逻辑关注点通过空行物理隔离
+● 避免在 setup 中编写超过 300 行的逻辑
+
+## 组件规范
+
+### 目录结构
+
+● 复杂组件使用 components/ComponentName/ 目录式组织
+● 单文件组件保持 script setup > template > style 顺序
+
+### 架构建议
+
+● 全局状态优先考虑 Pinia（而非 Vuex）
+● 异步操作使用 Suspense + async setup
+● 避免在组合函数中直接操作 DOM
+
+# 工具方法
+
+● 在需要调用类似通用函数时，请先检查项目内是否已有类似方法可用，有先检查 utils、hooks 一类的文件夹。
+
+# API
+
+1. 如果我发送你类似https://xxxxxxxxx.com/project/810/interface/api/cat_2783这样的消息请帮我调用 auto-api-mcp 的 yapi_get_interfaces
+2. 如果我发送你类似https://xxxxxxx.com/project/1199/interface/api/34478请调用 auto-api-mcp 的 yapi_get_interface_detail
+   auto-api-mcp 获取到的返回值均需要生成 mock interface model 创建 index.ts types.ts mock.ts 文件 请按照当前项目已经写好的 api 作为例子
+   严格遵循官方 Vue.js 文档，了解有关数据获取、渲染和路由的最新最佳实践。
+```
